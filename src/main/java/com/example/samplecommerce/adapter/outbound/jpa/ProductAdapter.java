@@ -2,6 +2,7 @@ package com.example.samplecommerce.adapter.outbound.jpa;
 
 import com.example.samplecommerce.application.domain.Product;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,25 +19,19 @@ public class ProductAdapter implements ProductOutboundPort {
 
     @Override
     public Product saveProduct(Product product) {
-        return null;
+        repository.save(new ProductEntity(product));
+
+        return product;
     }
 
     @Override
     public List<Product> getProductList() {
-        return null;
+        return repository.findAll().stream().map(ProductEntity::toDomain).toList();
     }
 
-    @Override
-    public void deleteProduct(int id) {
-    }
-
-    @Override
-    public Product updateProduct(Product product) {
-        return null;
-    }
 
     @Override
     public Optional<Product> getProductById(Long id) {
-        return Optional.empty();
+        return repository.findById(id).map(ProductEntity::toDomain);
     }
 }

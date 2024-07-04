@@ -4,7 +4,6 @@ import com.example.samplecommerce.application.domain.Product;
 import com.example.samplecommerce.application.ports.inbound.ProductInboundPort;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -18,15 +17,7 @@ public class ProductService implements ProductInboundPort {
 
     @Override
     public Product createProduct(Product product) {
-        return null;
-    }
-
-    @Override
-    public void deleteProduct(int id) { }
-
-    @Override
-    public Product updateProduct(Product product) {
-        return null;
+        return productOutboundPort.saveProduct(product);
     }
 
     @Override
@@ -35,7 +26,7 @@ public class ProductService implements ProductInboundPort {
     }
 
     @Override
-    public List<Product> productList() {
-        return null;
+    public List<Product> getProductList() {
+        return productOutboundPort.getProductList();
     }
 }

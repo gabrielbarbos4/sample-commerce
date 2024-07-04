@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ProductInboundPort {
     Product createProduct(Product product);
-    void deleteProduct(int id);
-    Product updateProduct(Product product);
     Product getProductById(Long id);
-    List<Product> productList();
+    List<Product> getProductList();
 }
