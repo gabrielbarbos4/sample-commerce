@@ -17,11 +17,13 @@ public class ProductAdapterHelper {
     }
 
     public static Product getProductByIdReturn() {
-        return new Product(
-            "mockProductEntity",
-            BigDecimal.valueOf(205.23),
-            true,
-            5
-        );
+        Product product = new Product();
+        product.setName("mockProductEntity");
+        product.setPrice(BigDecimal.valueOf(205.23));
+        product.setQuantity(5);
+        product.setAvailable(true);
+        product.setId(1L);
+
+        return product;
     }
 }

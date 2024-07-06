@@ -1,6 +1,7 @@
 package com.example.samplecommerce.adapter.inbound.controller;
 
 import com.example.samplecommerce.adapter.IntegrationTest;
+import com.example.samplecommerce.adapter.inbound.controller.product.ProductController;
 import com.example.samplecommerce.adapter.inbound.controller.product.request.CreateProductRequest;
 import com.example.samplecommerce.adapter.inbound.controller.product.response.ProductResponse;
 import com.example.samplecommerce.adapter.outbound.jpa.ProductEntity;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -21,6 +23,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class ProductControllerTest extends IntegrationTest {
@@ -30,22 +33,29 @@ public class ProductControllerTest extends IntegrationTest {
     private TransactionTemplate transactionTemplate;
 
     @Test
-    @DisplayName("given invalid CreateProductRequest when create is executed then return BAD_REQUEST error")
+    @DisplayName("given invalid CreateProductRequest | when create is executed | then return BAD_REQUEST error")
     void t1() throws Exception {
         // arrange
-        final RequestBuilder request = post(PRODUCT_URL)
+        CreateProductRequest createProductRequestWithNullField = ProductControllerHelper.validCreateProductRequest();
+        createProductRequestWithNullField.setName(null);
+
+        CreateProductRequest createProductRequestWithBlankField = ProductControllerHelper.validCreateProductRequest();
+        createProductRequestWithBlankField.setName("");
+
+        final RequestBuilder requestWithNullField = post(PRODUCT_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(ProductControllerHelper.invalidCreateProductRequest()));
+            .content(objectMapper.writeValueAsString(createProductRequestWithNullField));
+        final RequestBuilder requestWithBlankField = post(PRODUCT_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(createProductRequestWithBlankField));
 
-        // act
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-
-        // assert
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        // act - assert
+        mockMvc.perform(requestWithBlankField).andExpect(status().isBadRequest());
+        mockMvc.perform(requestWithNullField).andExpect(status().isBadRequest());
     }
 
     @Test
-    @DisplayName("given valid CreateProductRequest when create is executed then return the created product")
+    @DisplayName("given valid CreateProductRequest | when create is executed | then return the created product")
     void t2() throws Exception {
         // arrange
         final CreateProductRequest validCreateProductRequest = ProductControllerHelper.validCreateProductRequest();
