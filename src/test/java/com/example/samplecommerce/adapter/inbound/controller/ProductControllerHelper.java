@@ -14,13 +14,4 @@ public class ProductControllerHelper {
             .quantity(2)
             .build();
     }
-
-    public static CreateProductRequest invalidCreateProductRequest() {
-        return CreateProductRequest
-            .builder()
-            .available(true)
-            .price(BigDecimal.valueOf(235.23))
-            .quantity(2)
-            .build();
-    }
 }

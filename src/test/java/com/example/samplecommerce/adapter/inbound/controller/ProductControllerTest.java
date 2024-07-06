@@ -1,7 +1,6 @@
 package com.example.samplecommerce.adapter.inbound.controller;
 
 import com.example.samplecommerce.adapter.IntegrationTest;
-import com.example.samplecommerce.adapter.inbound.controller.product.ProductController;
 import com.example.samplecommerce.adapter.inbound.controller.product.request.CreateProductRequest;
 import com.example.samplecommerce.adapter.inbound.controller.product.response.ProductResponse;
 import com.example.samplecommerce.adapter.outbound.jpa.ProductEntity;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
