@@ -1,9 +1,16 @@
 package com.example.samplecommerce.adapter.outbound.jpa;
 import com.example.samplecommerce.application.domain.Product;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.math.BigDecimal;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Table(name = "product")
 public class ProductEntity {
 
@@ -23,22 +30,25 @@ public class ProductEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
-    public ProductEntity() { }
-
-    public ProductEntity(Product product) {
-        name = product.getName();
-        price = product.getPrice();
-        available = product.isAvailable();
-        quantity = product.getQuantity();
+    public static ProductEntity fromDomain(Product product) {
+        return ProductEntity.builder()
+            .id(product.getId())
+            .price(product.getPrice())
+            .available(product.isAvailable())
+            .quantity(product.getQuantity())
+            .name(product.getName())
+            .build();
     }
 
     public Product toDomain() {
-        Product p = new Product();
-        p.setAvailable(available);
-        p.setPrice(price);
-        p.setQuantity(quantity);
-        p.setName(name);
+        Product product = new Product();
 
-        return p;
+        product.setAvailable(available);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setName(name);
+        product.setId(id);
+
+        return product;
     }
 }

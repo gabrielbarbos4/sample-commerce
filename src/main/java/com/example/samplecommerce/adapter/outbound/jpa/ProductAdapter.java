@@ -19,9 +19,8 @@ public class ProductAdapter implements ProductOutboundPort {
 
     @Override
     public Product saveProduct(Product product) {
-        repository.save(new ProductEntity(product));
-
-        return product;
+        ProductEntity entity = repository.save(ProductEntity.fromDomain(product));
+        return entity.toDomain();
     }
 
     @Override
@@ -31,7 +30,9 @@ public class ProductAdapter implements ProductOutboundPort {
 
 
     @Override
-    public Optional<Product> getProductById(Long id) {
-        return repository.findById(id).map(ProductEntity::toDomain);
+    public Product getProductById(Long id) {
+        return repository.findById(id)
+            .map(ProductEntity::toDomain)
+            .orElseThrow(EntityNotFoundException::new);
     }
 }

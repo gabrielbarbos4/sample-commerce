@@ -22,7 +22,7 @@ public class ProductService implements ProductInboundPort {
 
     @Override
     public Product getProductById(Long id) {
-        return productOutboundPort.getProductById(id).orElseThrow(EntityNotFoundException::new);
+        return productOutboundPort.getProductById(id);
     }
 
     @Override
