@@ -6,14 +6,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
-public class ProductAdapter implements ProductOutboundPort {
+public class ProductJpaAdapter implements ProductOutboundPort {
 
     private final ProductRepository repository;
 
-    public ProductAdapter(ProductRepository repository) {
+    public ProductJpaAdapter(ProductRepository repository) {
         this.repository = repository;
     }
 

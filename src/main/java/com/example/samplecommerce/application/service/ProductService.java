@@ -3,7 +3,6 @@ package com.example.samplecommerce.application.service;
 import com.example.samplecommerce.application.domain.Product;
 import com.example.samplecommerce.application.ports.inbound.ProductInboundPort;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -17,6 +16,8 @@ public class ProductService implements ProductInboundPort {
 
     @Override
     public Product createProduct(Product product) {
+        product.validate();
+
         return productOutboundPort.saveProduct(product);
     }
 

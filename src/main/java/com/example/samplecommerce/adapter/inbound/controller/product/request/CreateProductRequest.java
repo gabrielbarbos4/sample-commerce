@@ -4,6 +4,7 @@ package com.example.samplecommerce.adapter.inbound.controller.product.request;
 import com.example.samplecommerce.application.domain.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,17 +15,19 @@ import java.math.BigDecimal;
 @Getter
 @Builder
 public class CreateProductRequest {
-    @NotNull(message = "Product name cannot be null t1")
+    @NotNull
     @NotBlank
     private String name;
 
-    @NotNull(message = "Product price cannot be null t2")
+    @NotNull
+    @Positive
     private BigDecimal price;
 
-    @NotNull(message = "Product quantity cannot be null t3")
+    @NotNull
+    @Positive
     private Integer quantity;
 
-    @NotNull(message = "Product availability cannot be null t4")
+    @NotNull
     private boolean available;
 
     public Product toDomain() {
@@ -33,7 +36,6 @@ public class CreateProductRequest {
         p.setPrice(price);
         p.setQuantity(quantity);
         p.setAvailable(available);
-
         return p;
     }
 }

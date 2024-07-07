@@ -1,4 +1,4 @@
-package com.example.samplecommerce.config;
+package com.example.samplecommerce.infrastructure.config;
 
 import com.example.samplecommerce.application.ports.inbound.ProductInboundPort;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;

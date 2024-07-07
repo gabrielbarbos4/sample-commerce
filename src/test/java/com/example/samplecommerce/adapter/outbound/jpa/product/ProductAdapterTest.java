@@ -1,9 +1,10 @@
 package com.example.samplecommerce.adapter.outbound.jpa.product;
 
-import com.example.samplecommerce.adapter.outbound.jpa.ProductAdapter;
+import com.example.samplecommerce.adapter.outbound.jpa.ProductJpaAdapter;
 import com.example.samplecommerce.adapter.outbound.jpa.ProductRepository;
 import com.example.samplecommerce.application.domain.Product;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,29 +23,21 @@ import static org.mockito.Mockito.when;
 public class ProductAdapterTest {
 
     @InjectMocks
-    private ProductAdapter adapter;
+    private ProductJpaAdapter adapter;
 
     @Mock
     private ProductRepository repository;
 
     @Test
-    public void createProduct_() {
-        // Arrange
-        when(repository.findById(anyLong())).thenReturn(Optional.empty());
-
-        // Act - Assert
-        assertThatThrownBy(() -> adapter.getProductById(1L)).isInstanceOf(EntityNotFoundException.class);
-    }
-
-    @Test
-    public void getProduct_withExistentId_thenReturnsProduct() {
-        // Arrange
+    @DisplayName("Given existent id | When getProductById executed | Then return the product")
+    public void t1() {
+        // arrange
         when(repository.findById(anyLong())).thenReturn(Optional.of(ProductAdapterHelper.mockEntity()));
 
-        // Act
+        // act
         Product product = adapter.getProductById(1L);
 
-        // Assert
+        // assert
         assertEquals(product.getId(), 1L);
         assertThat(product)
             .usingRecursiveComparison()
@@ -52,11 +45,12 @@ public class ProductAdapterTest {
     }
 
     @Test
-    public void getProduct_withNotExistentId_thenReturnsProduct() {
-        // Arrange
+    @DisplayName("Given not existent id | When getProductById executed | Then throws entityNotFoundException")
+    public void t2() {
+        // arrange
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // Act - Assert
+        // act - Assert
         assertThatThrownBy(() -> adapter.getProductById(1L)).isInstanceOf(EntityNotFoundException.class);
     }
 }
