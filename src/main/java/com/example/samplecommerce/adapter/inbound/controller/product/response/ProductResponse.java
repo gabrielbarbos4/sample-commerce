@@ -1,16 +1,13 @@
 package com.example.samplecommerce.adapter.inbound.controller.product.response;
 
 import com.example.samplecommerce.application.domain.Product;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 public class ProductResponse {
 
     private final Long id;
@@ -19,11 +16,13 @@ public class ProductResponse {
     private final Integer quantity;
     private final boolean available;
 
-    public ProductResponse(Product product) {
-        name = product.getName();
-        price = product.getPrice();
-        quantity = product.getQuantity();
-        available = product.isAvailable();
-        id = product.getId();
+    public static ProductResponse fromDomain(Product product) {
+        return ProductResponse.builder()
+            .id(product.getId())
+            .name(product.getName())
+            .price(product.getPrice())
+            .quantity(product.getQuantity())
+            .available(product.isAvailable())
+            .build();
     }
 }

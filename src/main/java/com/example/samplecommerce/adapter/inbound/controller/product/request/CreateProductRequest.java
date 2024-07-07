@@ -30,12 +30,14 @@ public class CreateProductRequest {
     @NotNull
     private boolean available;
 
-    public Product toDomain() {
-        Product p = new Product();
-        p.setName(name);
-        p.setPrice(price);
-        p.setQuantity(quantity);
-        p.setAvailable(available);
-        return p;
+    public static Product toDomain(CreateProductRequest request) {
+        Product product = new Product();
+
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setQuantity(request.getQuantity());
+        product.setAvailable(request.isAvailable());
+
+        return product;
     }
 }

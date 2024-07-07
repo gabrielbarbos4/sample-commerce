@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
 @Table(name = "product")
 public class ProductEntity {
@@ -40,14 +39,14 @@ public class ProductEntity {
             .build();
     }
 
-    public Product toDomain() {
+    public static Product toDomain(ProductEntity entity) {
         Product product = new Product();
 
-        product.setAvailable(available);
-        product.setPrice(price);
-        product.setQuantity(quantity);
-        product.setName(name);
-        product.setId(id);
+        product.setAvailable(entity.isAvailable());
+        product.setPrice(entity.getPrice());
+        product.setQuantity(entity.getQuantity());
+        product.setName(entity.getName());
+        product.setId(entity.getId());
 
         return product;
     }

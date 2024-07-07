@@ -11,8 +11,7 @@ public class Product {
     private boolean available;
     private Integer quantity;
 
-    public Product() {
-    }
+    public Product() { }
 
     public Product(String name, BigDecimal price, boolean available, Integer quantity) {
         this.name = name;
