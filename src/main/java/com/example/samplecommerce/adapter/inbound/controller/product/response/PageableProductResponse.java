@@ -3,12 +3,10 @@ package com.example.samplecommerce.adapter.inbound.controller.product.response;
 import com.example.samplecommerce.application.domain.PageableProduct;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 public class PageableProductResponse {
     private int totalPages;

@@ -1,6 +1,7 @@
 package com.example.samplecommerce.adapter.inbound.controller;
 
 import com.example.samplecommerce.adapter.inbound.controller.product.request.CreateProductRequest;
+import com.example.samplecommerce.adapter.outbound.jpa.ProductEntity;
 
 import java.math.BigDecimal;
 
@@ -41,5 +42,14 @@ public class ProductControllerHelper {
         request.setName(null);
 
         return request;
+    }
+
+    public static ProductEntity productEntity() {
+        return ProductEntity.builder()
+            .available(true)
+            .name("mockProductEntity")
+            .price(BigDecimal.valueOf(235.23))
+            .quantity(2)
+            .build();
     }
 }

@@ -2,7 +2,7 @@ package com.example.samplecommerce.adapter;
 
 import com.example.samplecommerce.adapter.outbound.jpa.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +26,7 @@ public abstract class IntegrationTest {
     @Autowired
     protected ProductRepository productRepository;
 
-    @BeforeEach
+    @AfterEach
     void beforeEach() {
         productRepository.deleteAll();
     }

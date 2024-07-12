@@ -2,8 +2,8 @@ package com.example.samplecommerce.adapter.inbound.controller.product;
 
 
 import com.example.samplecommerce.adapter.inbound.controller.product.request.CreateProductRequest;
+import com.example.samplecommerce.adapter.inbound.controller.product.response.PageableProductResponse;
 import com.example.samplecommerce.adapter.inbound.controller.product.response.ProductResponse;
-import com.example.samplecommerce.application.domain.PageableProduct;
 import com.example.samplecommerce.application.ports.inbound.ProductInboundPort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<PageableProduct> list(
+    public ResponseEntity<PageableProductResponse> list(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size
     ) {
-        return ResponseEntity.ok(productInboundPort.getProductList(page, size));
+        return ResponseEntity.ok(PageableProductResponse.fromDomain(productInboundPort.getProductList(page, size)));
     }
 
     @GetMapping("/{id}")

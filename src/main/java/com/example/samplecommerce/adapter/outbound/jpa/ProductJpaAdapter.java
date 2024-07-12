@@ -2,8 +2,8 @@ package com.example.samplecommerce.adapter.outbound.jpa;
 
 import com.example.samplecommerce.application.domain.PageableProduct;
 import com.example.samplecommerce.application.domain.Product;
+import com.example.samplecommerce.application.exception.ProductNotFoundException;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -43,6 +43,6 @@ public class ProductJpaAdapter implements ProductOutboundPort {
     public Product getProductById(Long id) {
         return repository.findById(id)
             .map(ProductEntity::toDomain)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(ProductNotFoundException::new);
     }
 }

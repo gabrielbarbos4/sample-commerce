@@ -2,6 +2,7 @@ package com.example.samplecommerce.adapter.inbound.controller;
 
 import com.example.samplecommerce.adapter.IntegrationTest;
 import com.example.samplecommerce.adapter.inbound.controller.product.request.CreateProductRequest;
+import com.example.samplecommerce.adapter.inbound.controller.product.response.PageableProductResponse;
 import com.example.samplecommerce.adapter.inbound.controller.product.response.ProductResponse;
 import com.example.samplecommerce.adapter.outbound.jpa.ProductEntity;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +22,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,5 +92,58 @@ public class ProductControllerTest extends IntegrationTest {
         return post(PRODUCT_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request));
+    }
+
+    @Test
+    @DisplayName("Given valid id | When getProductByid executed | Then return productResponse")
+    void t3() throws Exception {
+        // Arrange
+        final RequestBuilder createRequest = post(PRODUCT_URL)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(ProductControllerHelper.validCreateProductRequest()));
+        final MockHttpServletResponse createResponse = mockMvc.perform(createRequest).andReturn().getResponse();
+        final ProductResponse createdProduct = objectMapper.readValue(createResponse.getContentAsString(), ProductResponse.class);
+
+        RequestBuilder request = get(PRODUCT_URL + "/" + createdProduct.getId());
+
+        // Act
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        ProductResponse productResponse = objectMapper.readValue(response.getContentAsString(), ProductResponse.class);
+
+        // Assert
+        assertNotNull(productResponse);
+        assertEquals(productResponse.getId(), createdProduct.getId());
+    }
+
+    @Test
+    @DisplayName("Given page and pageSize parameters | When getProductList")
+    public void t4() throws Exception {
+        // Arrange
+        final String page = "0", pageSize = "5";
+        final int totalItems = 6;
+        final RequestBuilder request = get(PRODUCT_URL)
+            .param("page", page)
+            .param("pageSize", pageSize);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(@NotNull TransactionStatus status) {
+                for (int i = 0; i < totalItems; i++) {
+                    productRepository.save(ProductControllerHelper.productEntity());
+                }
+            }
+        });
+
+        // Act
+        final MockHttpServletResponse response = mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andReturn().getResponse();
+        final PageableProductResponse pageableProductResponse = objectMapper.readValue(response.getContentAsString(), PageableProductResponse.class);
+
+        // Assert
+        assertThat(pageableProductResponse.getProducts().size()).isEqualTo(Integer.parseInt(pageSize));
+        assertThat(pageableProductResponse.getPageNumber()).isEqualTo(Integer.parseInt(page));
+        assertThat(pageableProductResponse.getTotalItems()).isEqualTo(totalItems);
+        assertThat(pageableProductResponse.getTotalPages()).isEqualTo(2);
+        assertThat(pageableProductResponse.getProducts().get(0)).isInstanceOf(ProductResponse.class);
     }
 }

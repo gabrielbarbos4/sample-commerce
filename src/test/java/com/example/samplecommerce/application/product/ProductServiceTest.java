@@ -1,5 +1,6 @@
 package com.example.samplecommerce.application.product;
 
+import com.example.samplecommerce.application.domain.PageableProduct;
 import com.example.samplecommerce.application.domain.Product;
 import com.example.samplecommerce.application.exception.InvalidProductException;
 import com.example.samplecommerce.application.ports.outbound.ProductOutboundPort;
@@ -18,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +69,30 @@ public class ProductServiceTest {
     public void t3(Product product) {
         // act - assert
         assertThatThrownBy(() -> productService.createProduct(product)).isInstanceOf(InvalidProductException.class);
+    }
+
+
+    @Test
+    @DisplayName("Given page and pageSize | When getProductList executed | Then return a pageableProduct")
+    public void t4() {
+        // arrange
+        when(productOutboundPort.getProductList(anyInt(), anyInt())).thenReturn(new PageableProduct());
+
+        // act - assert
+        assertNotNull(productService.getProductList(5, 5));
+    }
+
+    @Test
+    @DisplayName("Given existent product id | When getProductById executed | Then return the product")
+    public void t5() {
+        // Arrange
+        when(productOutboundPort.getProductById(anyLong())).thenReturn(ProductServiceHelper.product());
+
+        // Act
+        Product product = productService.getProductById(1L);
+
+        // Assert
+        assertThat(product).isInstanceOf(Product.class);
     }
 
     static List<Product> invalidProductArgs() {
